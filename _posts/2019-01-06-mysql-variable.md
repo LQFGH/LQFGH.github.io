@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "MySql核心技术"
+title:      "MySql核心技术-mysql变量"
 subtitle:   "mysql变量"
 date:       2019-01-05 19:00:00
 author:     "LQFGH"
@@ -14,6 +14,7 @@ tags:
 系统变量
 * 全局变量
 * 会话变量
+
 自定义变量
 * 用户变量
 * 局部变量
@@ -36,6 +37,7 @@ SHOW SESSION VARIABLES LIKE '%char%';
 
 ###### 查看指定的系统变量的值
 > 变量的名字前面加上 `@@`
+
 ```sql
 SELECT @@character_set_client;
 ```

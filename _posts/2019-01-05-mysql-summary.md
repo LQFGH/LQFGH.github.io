@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "MySql核心技术"
+title:      "MySql核心技术-mysql核心知识点总结"
 subtitle:   "mysql核心知识点总结"
 date:       2019-01-05 19:00:00
 author:     "LQFGH"
@@ -26,6 +26,7 @@ SHOW DATABASES
 
 ###### 查看数据库中表有哪些
 > 前提是已经在某一个数据库中，使用命令 `USE database_name`
+
 ```sql
 SHOW TABLES;
 ```
