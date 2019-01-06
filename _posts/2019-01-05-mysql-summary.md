@@ -11,6 +11,33 @@ tags:
   - mysql
 ---
 
+## 查看命令
+
+***
+
+> 通常为 SHOW DATABASES|TABLES|COLUMN 
+> 查看列时需要加上表名 SHOW COLUMN FROM table_name
+
+###### 查看数据库有哪些
+```sql
+SHOW DATABASES
+```
+
+
+###### 查看数据库中表有哪些
+> 前提是已经在某一个数据库中，使用命令 `USE database_name`
+```sql
+SHOW TABLES;
+```
+
+
+###### 查看表中有哪些行
+```sql
+SHOW COLUMN FROM table_name
+```
+
+
+
 ## 单行函数
 
 ***
@@ -27,7 +54,7 @@ tags:
 
 
 > 表的修改一般都是
-> ALTER TABLE XXX ADD|DROP|MODIFY|CHANGE COLUMN 列名 [列类型，约束]
+> `ALTER TABLE XXX ADD|DROP|MODIFY|CHANGE COLUMN` 列名 [列类型，约束]
 
 ###### 重命名表
 ```sql
@@ -79,5 +106,7 @@ change column last_name `name` varchar(20);
 
 
 ###### 浮点型
+
+
 
 
