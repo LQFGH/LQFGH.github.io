@@ -32,12 +32,19 @@ SHOW VARIABLES;
 
 ###### 查看满足条件的系统变量
 ```sql
-SHOW SESSION VARIABLES LIKE '%char%';
+SHOW VARIABLES LIKE '%char%';
 ```
+
 
 ###### 查看指定的系统变量的值
 > 变量的名字前面加上 `@@`
 
 ```sql
 SELECT @@character_set_client;
+```
+
+
+###### 设置环境变量
+```sql
+SET @@global.autocommit = 0;
 ```
