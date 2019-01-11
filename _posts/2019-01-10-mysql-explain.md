@@ -30,11 +30,15 @@ tags:
 ## 怎么用
 
 ```sql
-explain select * from employees where employee_id = 195;
+EXPLAIN
+SELECT * 
+FROM employees e
+JOIN departments d
+ON e.department_id = d.department_id
+JOIN locations l
+ON d.location_id = l.location_id
 ```
 结果
-+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
-| id | select_type | table     | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |
-+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
-|  1 | SIMPLE      | employees | NULL       | const | PRIMARY       | PRIMARY | 4       | const |    1 |   100.00 | NULL  |
-+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+
+![执行计划结果截图](img\in-post\mysql-explain.jpg)
+
