@@ -40,5 +40,8 @@ ON d.location_id = l.location_id
 ```
 结果
 
-![执行计划结果截图](img\in-post\mysql-explain.jpg)
+![执行计划结果截图](/img/in-post/mysql-explain.jpg)
+
+
+## 结果分析
 
