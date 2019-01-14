@@ -12,8 +12,8 @@ tags:
 ---
 
 * MySQL的提供的慢查询日志是MySQL提供的一种日志记录，它用来记录在MySQL中相应时间超过阙值的语句，具体只运行时间超过 `long_query_time` 只的sql，则会被记录在慢查询日志中
-* 具体运行时间超过 `long_query_time` 值的sql,则会被记录到慢查询日志中。 `long_query_time `的默认值为10秒，意思是执行十秒钟以上的sql被记录到慢查询日志中。
-  * 由慢查询日志查看哪些sql执行时间超过 `long_query_time`  
+* 具体运行时间超过 `long_query_time` 值的sql,则会被记录到慢查询日志中。 `long_query_time `的默认值为10秒，意思是执行十秒钟以上的sql被记录到慢查询日志中
+* 由慢查询日志查看哪些sql执行时间超过 `long_query_time`  
 
 #### **慢查询日志使用**
 
