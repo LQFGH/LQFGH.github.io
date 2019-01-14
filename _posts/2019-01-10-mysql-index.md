@@ -26,14 +26,23 @@ SHOW INDEX FROM employees;
 
 #### **创建**
 
+```sql
+ALTER TABLE employees ADD INDEX inx_emp_nameEmail (last_name,email);
+
+CREATE INDEX inx_emp_nameEmail ON employees(last_name,email);
+```
 
 #### **删除**
 
+```sql
+DROP INDEX inx_emp_nameEmail ON employees;
+```
 
 #### **查看**
 
-
-#### **修改**
+```sql
+SHOW INDEX FROM employees;
+```
 
 
 
@@ -56,6 +65,3 @@ SHOW INDEX FROM employees;
 
 ## 索引分析
 
-***
-
-#### 表单
