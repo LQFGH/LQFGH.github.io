@@ -117,3 +117,24 @@ select empno,dept.deptno,dname from emp left outer join dept on emp.`deptno` = d
 ###### 四、还有哪些需要格外注意的项
 
 ![需要注意的出现的项](/img/in-post/mysql-show-profile7.jpg)
+
+
+#### 最后补充一个知识点，是可以记录所有执行过的sql的信息-全局查询日志
+
+> 这里只推荐在测试环境使用
+
+###### 开启全局查询日志
+
+```sql
+SET GLOBAL general_log=1; --设置开启全局查询日志
+SET GLOBAL log_output='TABLE'; --设置将查询日志输出到表中，mysql.general_log表
+```
+
+###### 查看全局查询日志
+
+> 执行几条sql之后，查看全局查询日志
+
+```sql
+select * from mysql.general_log;
+```
+![](/img/in-post/mysql-show-profile10.jpg)
