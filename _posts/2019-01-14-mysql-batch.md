@@ -70,7 +70,8 @@ end $$
 
 ```
 
-编写随机整数函数
+#### 编写随机整数函数
+
 ```sql
 delimiter $$
 create function rand_num() returns int(5)
