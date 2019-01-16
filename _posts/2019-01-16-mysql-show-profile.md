@@ -102,7 +102,7 @@ show profile cpu,block io for query 4;
 > `Sending data` 这个状态的名称很具有误导性，所谓的`Sending data`并不是单纯的发送数据，而是包括“收集 + 发送 数据”。
 > 这里的关键是为什么要收集数据，原因在于：`mysql`使用“索引”完成查询结束后，`mysql`得到了一堆的行`id`，如果有的列并不在索> > 引中，`mysql`需要重新到“数据行”上将需要返回的数据读取出来返回个客户端。
 
-**这里将查询的某些参数去掉在执行查询**
+###### 三、 这里将查询的某些参数去掉在执行查询
 
 > 这里将之前的 `*` 换成了具体的几个参数
 > 发现 `Sending data` 比之前少了很多
@@ -114,6 +114,6 @@ select empno,dept.deptno,dname from emp left outer join dept on emp.`deptno` = d
 ![](/img/in-post/mysql-show-profile8.jpg.jpg)
 
 
-###### 三、还有哪些需要格外注意的项
+###### 四、还有哪些需要格外注意的项
 
 ![需要注意的出现的项](/img/in-post/mysql-show-profile7.jpg)
