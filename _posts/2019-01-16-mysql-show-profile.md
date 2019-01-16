@@ -12,6 +12,7 @@ tags:
 ---
 
 
+  　分析SQL执行带来的开销是优化SQL的重要手段。在MySQL数据库中，可以通过配置profiling参数来启用SQL剖析。该参数可以在全局和session级别来设置。对于全局级别则作用于整个MySQL实例，而session级别紧影响当前session。该参数开启后，后续执行的SQL语句都将记录其资源开销，诸如IO，上下文切换，CPU，Memory等等。根据这些开销进一步分析当前SQL瓶颈从而进行优化与调整。本文描述了如何使用MySQL profile。
 
 
 #### **查看 `show profile` 是否已经开启**
