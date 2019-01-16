@@ -105,6 +105,7 @@ show profile cpu,block io for query 4;
 **这里将查询的某些参数去掉在执行查询**
 
 > 这里将之前的 `*` 换成了具体的几个参数
+> 发现 `Sending data` 比之前少了很多
 
 ```sql
 select empno,dept.deptno,dname from emp left outer join dept on emp.`deptno` = dept.`deptno`;
