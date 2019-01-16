@@ -81,3 +81,27 @@ show profiles;
 ![查看 `show profile`](/img/in-post/mysql-show-profile5.jpg)
 
 > `Duration` 是执行时间
+
+#### 使用 `show profile` 参数查看详情
+
+###### 一、具体参数
+
+![`show profile` 参数](/img/in-post/mysql-show-profile7.jpg)
+
+###### 二、使用
+
+```sql
+show profile cpu,block io for query 3;
+show profile cpu,block io for query 4;
+```
+
+![](/img/in-post/mysql-show-profile6.jpg)
+
+> 这里发现`Sending data`耗费的时间格外的多，就将查询到的`Sending data`的解释贴在这里是`Sending data`
+
+> `Sending data` 这个状态的名称很具有误导性，所谓的`Sending data`并不是单纯的发送数据，而是包括“收集 + 发送 数据”。
+> 这里的关键是为什么要收集数据，原因在于：`mysql`使用“索引”完成查询结束后，`mysql`得到了一堆的行`id`，如果有的列并不在索> > 引中，`mysql`需要重新到“数据行”上将需要返回的数据读取出来返回个客户端。
+
+###### 还有哪些需要格外注意的项
+
+![需要注意的出现的项](/img/in-post/mysql-show-profile7.jpg)
