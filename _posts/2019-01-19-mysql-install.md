@@ -23,6 +23,10 @@ tags:
 
 ## 确保系统中没有没有MySQL
 
+***
+
+
+
 
 > 这一步必须做，因为你也不知道你到系统有没有预装MySQL相关的东西
 
@@ -48,6 +52,10 @@ rpm -e 安装包的名字
 
 ## 安装 `MySQL` 依赖的库
 
+***
+
+
+
 不管有没有都去执行下
 ```shell
 yum search libaio 
@@ -57,6 +65,10 @@ yum install libaio
 
 
 ## 安装包下载
+
+***
+
+
 
 > 地址：[MySQL下载地址](https://dev.mysql.com/downloads/mysql/5.6.html#downloads)
 
@@ -69,12 +81,20 @@ yum install libaio
 
 ## 解压安装包
 
+***
+
+
+
 > 我这里将压缩包解压到 `/usr/local` ,并将文件夹改为 `mysql` ，这里基本的命令就不做介绍了
 
 ![安装目录](/img/in-post/mysql-install1.jpg)
 
 
 ## 安装
+
+***
+
+
 
 ###### **添加自己的配置文件**
 
@@ -168,12 +188,16 @@ cp support-files/mysql.server /etc/init.d/mysql.server
 
 ## 启动 `MySQL` 
 
+***
+
+
+
 
 ```shell
 /etc/init.d/mysql.server restart
 ```
 
-如图所示启动成功
+**如图所示启动成功**
 
 ![](/img/in-post/mysql-intall7.jpg)
 
@@ -193,10 +217,14 @@ mysql -u root -p
 
 ## 修改密码
 
+***
+
+
+
 > 这一步是必须做的，否则不能操作数据库
 
 ```sql
 alter user 'root'@'localhost' identified by 'new_password';
 ```
 
-至此，数据库安装完成
+**至此，数据库安装完成**
