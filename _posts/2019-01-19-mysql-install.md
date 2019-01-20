@@ -13,11 +13,11 @@ tags:
 
 **经历了千难万险终于把 `MySQL` 安装成功了！！！**
 
-**一下是我在不同版本CentOS多次安装**
+**以下是我在不同版本CentOS多次安装，严格执行安装步骤应该不会有什么问题**
 
 安装步骤都是参口 `MySQL` 官方文档进行，希望安装的朋友们也可以去参考最新的官方文档安装，也许可以避免不必要的麻烦。
 接下来就把安装步骤记录下来，供以后参考。
-***
+
 
 
 
@@ -43,11 +43,10 @@ rpm -e 安装包的名字
 ###### **确保你到系统中相关的 `mysql `残留文件删除干净**
 
 主要是删除 `my.cnf `（ `linux` 中是 `my.cnf `, `windows` 中是 `my.ini` ），下面是 `MySQL` 回去默认找配置文件的地方，自上而下是配置文件的优先级
+![](/img/in-post/mysql-install3.jpg)
 
 > 请注意 只要是 `my.cnf.*` 都有可能会被 `MySQL` 加载，所以尽量删除调
 > 我就是因为没有删除配置文件导致浪费了很多时间
-
-![](/img/in-post/mysql-install3.jpg)
 
 
 ## 安装 `MySQL` 依赖的库
@@ -73,7 +72,6 @@ yum install libaio
 > 地址：[MySQL下载地址](https://dev.mysql.com/downloads/mysql/5.6.html#downloads)
 
 我下载的版本是 `5.7.24` 
-
 ![](/img/in-post/mysql-install.jpg)
 
 将安装包上传的 `CentOS` 上，这里就不再赘述
@@ -198,11 +196,9 @@ cp support-files/mysql.server /etc/init.d/mysql.server
 ```
 
 **如图所示启动成功**
-
 ![](/img/in-post/mysql-intall7.jpg)
 
 **配置下环境变量**
-
 ![](/img/in-post/mysql-install6.jpg)
 
 保存并退出，刷新环境变量
