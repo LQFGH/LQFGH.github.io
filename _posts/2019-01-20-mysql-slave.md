@@ -66,16 +66,17 @@ server-id=1
 **二、【必须】 启用二进制日志**
 
 ```my.ini
-log-bin=D:\DevInstall\mysql-5.7.24-winx64\data\log-bin\mysqlgin
+log-bin=D:\DevInstall\mysql-5.7.24-winx64\data\mysqlgin
 ```
 
 
 **三、【可选】 启用错误日志**
 
 ```my.ini
-log-err=D:\DevInstall\mysql-5.7.24-winx64\data\log-err\mysqlerr
+log-err=D:\DevInstall\mysql-5.7.24-winx64\data\mysqlerr
 ```
 
+> 由于我启动的时候总是报这个变量错误，所以这个就不要配置了
 
 **四、【可选】根目录**
 
@@ -118,7 +119,7 @@ binlog-ignore-db=mysql
 binlog=do-db=xxx
 ```
 
-< 八、九二选一
+> 八、九二选一
 
 
 
@@ -202,6 +203,8 @@ MASTER_LOG_FILE='mysqlbin.000001',MASTER_LOG_POS=595;
 ```sql
 start slave;
 ```
+
+ > 停止主从复制 `stop slave;`
 
 ###### 查看是否配置成功
 
