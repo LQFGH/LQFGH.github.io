@@ -11,31 +11,66 @@ tags:
   - mysql高级
 ---
 
-**经历了千难万险终于把MySQL安装成功了。。。。。**
-安装步骤都是参口MySQL官方文档进行，希望安装的朋友们也可以去参考最新的官方文档安装，也许可以避免不必要的麻烦。
+**经历了千难万险终于把 `MySQL` 安装成功了。。。。。**
+
+安装步骤都是参口 `MySQL` 官方文档进行，希望安装的朋友们也可以去参考最新的官方文档安装，也许可以避免不必要的麻烦。
 接下来就把安装步骤记录下来，供以后参考。
 
-#### 确保系统中没有没有MySQL
+
+## 确保系统中没有没有MySQL
+
 
 > 这一步必须做，因为你也不知道你到系统有没有预装MySQL相关的东西
 
-**查询系统中有没有安装MySQL**
+###### **查询系统中有没有安装MySQL**
 ```shell
 rpm -qa | grep -i mysql
 ```
 
-**如果有的话请卸载干净**
+###### **如果有的话请卸载干净**
 ```shell
 rpm -e 安装包的名字
 ```
 
-**确保你到系统中相关的mysql残留文件删除干净**
-主要是删除my.cnf（linux中是my.cnf,windows中是my.ini），下面是MySQL回去默认找配置文件的地方，自上而下是配置文件的优先级
+###### **确保你到系统中相关的 `mysql `残留文件删除干净**
+
+主要是删除 `my.cnf `（ `linux` 中是 `my.cnf `, `windows` 中是 `my.ini` ），下面是 `MySQL` 回去默认找配置文件的地方，自上而下是配置文件的优先级
 > 我就是因为没有删除配置文件导致浪费了很多时间
 
 ![](/img/in-post/mysql-install3.jpg)
 
-**添加自己的配置文件**
+
+## 安装 `MySQL` 依赖的库
+
+不管有没有都去执行下
+```shell
+yum search libaio 
+yum install libaio
+```
+
+
+
+## 安装包下载
+
+> 地址：[MySQL下载地址](https://dev.mysql.com/downloads/mysql/5.6.html#downloads)
+
+我下载的版本是 `5.7.24` 
+
+![](/img/in-post/mysql-install.jpg)
+
+将安装包上传的 `CentOS` 上，这里就不再赘述
+
+
+## 解压安装包
+
+> 我这里将压缩包解压到 `/usr/local` ,并将文件夹改为 `mysql` ，这里基本的命令就不做介绍了
+
+![安装目录](/img/in-post/mysql-install1.jpg)
+
+
+## 安装
+
+###### **添加自己的配置文件**
 
 我这里将自己的配置文件放到 `/etc/mysql/`目录下
 我的MySQL的 `basedir=/usr/local/mysql` 、 `datadir=/var/lib/mysql/data`
@@ -78,46 +113,18 @@ rpm -e 安装包的名字
 #sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
 ```
 
-创建basedir目录并将配置文件放进去
+创建 `basedir` 目录并将配置文件放进去
 ```shell
 mkdir -p /etc/mysql/
 ```
 
-将datadir的目录创建出来
+将 `datadir` 的目录创建出来
 ```shell
 mkdir -p /var/lib/mysql/data
 ```
 
 
-#### 安装MySQL依赖的库
-
-不管有没有都去执行下
-```shell
-yum search libaio 
-yum install libaio
-```
-
-
-
-#### 安装包下载
-
-> 地址：[MySQL下载地址](https://dev.mysql.com/downloads/mysql/5.6.html#downloads)
-
-我下载的版本是 `5.7.24` 
-
-![](/img/in-post/mysql-install.jpg)
-
-将安装包上传的CentOS上，这里就不再赘述
-
-
-#### 解压安装包
-
-> 我这里将压缩包解压到/usr/local,并将文件夹改为mysql，这里基本的命令就不做介绍了
-
-![安装目录](/img/in-post/mysql-install1.jpg)
-
-
-#### 安装
+###### 执行安装命令
 
 > 这里直接按照官方文档的步骤安装，直接复制粘贴，也不容易出问题
 > 这里的由于我已经解压好了，所以中间解压的步骤就省略了
@@ -127,7 +134,7 @@ yum install libaio
 
 接下里是我执行的命令，只需要到相应的路径下把我的命令复制粘贴就可以了
 
-> 这里的mysql用户和组是专门用来管理mysql的
+> 这里的 `mysql` 用户和组是专门用来管理 `mysql` 的
 
 在执行到 `bin/mysqld --initialize --user=mysql` (初始化数据)时需要注意下图中红色的地方是数据库的初始化密码
 
@@ -151,7 +158,8 @@ cp support-files/mysql.server /etc/init.d/mysql.server
 
 
 
-#### 启动MySQL
+## 启动 `MySQL` 
+
 
 ```shell
 /etc/init.d/mysql.server restart
@@ -175,7 +183,7 @@ source /etc/profile
 mysql -u root -p 
 ```
 
-#### 修改密码
+## 修改密码
 
 > 这一步是必须做的，否则不能操作数据库
 
