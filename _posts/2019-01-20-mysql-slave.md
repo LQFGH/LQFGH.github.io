@@ -76,7 +76,7 @@ log-bin=D:\DevInstall\mysql-5.7.24-winx64\data\mysqlgin
 log-err=D:\DevInstall\mysql-5.7.24-winx64\data\mysqlerr
 ```
 
-> 由于我启动的时候总是报这个变量错误，所以这个就不要配置了
+> 由于我启动的时候总是报这个变量错误，所以这个就不要配置了 
 
 **四、【可选】根目录**
 
