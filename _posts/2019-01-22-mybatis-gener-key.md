@@ -4,7 +4,7 @@ title:      "MyBatis-获取生成主键"
 subtitle:   "获取生成主键"
 date:       2019-01-22 02:00
 author:     "LQFGH"
-header-img: "img/mybatis-logo.jpg"
+header-img: "img/post-bg-halting.jpg"
 header-mask: 0.3
 catalog:    true
 tags:
@@ -12,7 +12,7 @@ tags:
 ---
 
 
-img/mybatis-logo.jpg
+`MyBatis` 获取主键分为获取自增主键和非自增主键，这里用 `MySQL` 代表自增主键，用 `Oracle` 代表非自增主键
 
 #### `MySQL` 保存并获取主键
 
