@@ -80,16 +80,45 @@ tags:
 ![](/img/in-post/mybatis-sqlsessionfactory11.jpg)
 
 > 注意下 `SqlSessionFactoryBuilder` 的方法就可以看出该类只是用于创建`SqlSessionFactory`，标出的第
-> 77行为创建**全局配置**文件解析的类，这里不多做介绍。重点是调用第78行中 `parser.parse()`调用全局配置文> 件解析。
+> 77行为创建**全局配置**文件解析的类，这里不多做介绍。重点是调用第78行中的 `parser.parse()`调用，进行全> 局配置文件解析。
+
+###### 调用 `XMLConfigBuilder` 的全局配置文件解析方法
+![](/img/in-post/mybatis-sqlsessionfactory12.jpg)
+
+```java
+ if (parsed) {
+      throw new BuilderException("Each XMLConfigBuilder can only be used once.");
+  }
+ parsed = true;
+```
+
+> 代码用于判断当前 `XMLConfigBuilder` 实例是否执行过，每个实例只能执行一次，因为全局配置文件指挥被解析一> 次即可，如果没有解析过就将标志置为`true`,开始解析。
+
+```java
+  parseConfiguration(parser.evalNode("/configuration"));
+```
+
+> 这一行代码调用当前类中解析配置文件的方法 `parser.evalNode("/configuration")` 是
+> 解析全局配置文件中 `configuration` 节点，parseConfiguration方法就在当前方法下面。
 
 
+###### 解析全局配置文件 
 
+![](img/in-post/mybatis-sqlsessionfactory13.jpg)
 
+> 该方法主要用来解析全局配置文件中的每一个标签，其他标签不做说明，`mapper` 标签的解析说明下
+> 接下来进入118行的方法
 
+###### 解析 `mapper` 标签
 
+![](/img/in-post/mybatis-sqlsessionfactory14.jpg)
 
+> 357行代码由于我的全局配置文件中`mapper`配置的是`resource`所以直接进入`else`
+> 366行根据`mapper`标签的`resource`获取的`mapper`配置文件的路径，将`mapper`一流的形式读取
+> 367行创建`mapper`配置文件解析器
+> 接下来进入368行接下`mapper`配置文件
 
-
+###### 解析`mapper`配置文件
 
 
 
