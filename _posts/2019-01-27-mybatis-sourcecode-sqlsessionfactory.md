@@ -22,7 +22,7 @@ tags:
 > **这里将总结放到前面的目的就是希望读者可以先了解整个的流程和重要代码的意义，以免在具体看的时候迷失方向**
 
 
->  1、整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建 			  	            `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
+>  1、整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建`DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
 > 
 >  2、`configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
 
@@ -73,7 +73,7 @@ tags:
 ## 断点走走
 
 
-> 接下来不会每一处代码都做说明，会跳过一些代码，只会在重要的地方截图说明
+> 代码的整个流程都涉及到了，读者可以自己跟随本文进行断点阅读代码
 > 
 > 需要注意的代码会用会标注出来
 > 
@@ -101,8 +101,7 @@ tags:
  parsed = true;
 ```
 
-> 代码用于判断当前 `XMLConfigBuilder` 实例是否执行过，每个实例只能执行一次，因为全局配置文件指挥被解析一
-> 
+> 代码用于判断当前 `XMLConfigBuilder` 实例是否执行过，每个实例只能执行一次，因为全局配置文件指只会解析一
 > 次即可，如果没有解析过就将标志置为`true`,开始解析。
 
 ```java
@@ -118,7 +117,7 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory13.jpg)
 
-> 该方法主要用来解析全局配置文件中的每一个标签，其他标签不做说明，`mapper` 标签的解析说明下
+> 该方法主要用来解析全局配置文件中的每一个标签，其他标签不做说明，`mapper` 标签的解析说明下。
 > 
 > 接下来进入118行的方法
 
@@ -126,20 +125,20 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory14.jpg)
 
-> 357行代码由于我的全局配置文件中`mapper`配置的是`resource`所以直接进入`else`
+> 357行代码由于我的全局配置文件中 `mapper`配置的是 `resource`所以直接进入 `else`
 > 
-> 366行根据`mapper`标签的`resource`获取的`mapper`配置文件的路径，将`mapper`一流的形式读取
+> 366行根据 `mapper`标签的 `resource`获取的 `mapper`配置文件的路径，将 `mapper`一流的形式读取
 > 
-> 367行创建`mapper`配置文件解析器
+> 367行创建 `mapper`配置文件解析器
 > 
-> 接下来进入368行接下`mapper`配置文件
+> 接下来进入368行接下 `mapper`配置文件
 > 
 
 ###### 进入`mapper`配置文件解析
 
 ![](/img/in-post/mybatis-sqlsessionfactory15.jpg)
 
-> **这里注意下**，代码已经从`XMLConfigBuilder` 进入到了 `XMLMapperBuilder`
+> **这里注意下**，代码已经从 `XMLConfigBuilder` 进入到了  `XMLMapperBuilder`
 > 
 > 进入到92行方法看看具体解析mapper配置文件
 
@@ -147,7 +146,7 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory16.jpg)
 
-> 可以看到这个方法是对mapper配置文件的各个标签解析，我们进入118行看看具体的增删改查的解析。
+> 可以看到这个方法是对 `mapper`配置文件的各个标签解析，我们进入118行看看具体的增删改查的解析。
 > 
 
 
@@ -155,15 +154,15 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory17.jpg)
 
-> 125行处由于我没有配置 `databaseId` 所以获取到`configuration.getDatabaseId()`
+> 125行处由于我没有配置 `databaseId` 所以获取到 `configuration.getDatabaseId()`
 > 
 > 为空，不进入判断。
 > 
 > 那么接下来进入128行进行 `select|insert|update|delete` 解析到图中131行方法
 > 
-> 133行创建`select|insert|update|delete` 解析器
+> 133行创建 `select|insert|update|delete` 解析器
 > 
-> 135行进入正真的`select|insert|update|delete`解析
+> 135行进入正真的 `select|insert|update|delete`解析
 
 
 ###### 解析 `select|insert|update|delete` 
@@ -172,9 +171,9 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory18.jpg)
 
-> 从这里已经进入到 `builderAssistant` 类中
+> **这里注意下**，从这里已经进入到 `builderAssistant` 类中
 > 
-> 109行将所有解析的属性添加到 `builderAssistant` 中(最终都会保存到`configuration`中)
+> 109行将所有解析的属性添加到 `builderAssistant` 中(最终都会保存到 `configuration`中)
 > 
 > 进入到109中保存属性方法中
 > 
@@ -183,7 +182,7 @@ tags:
 
 ![](/im/in-post/mybatis-sqlsessionfactory19.jpg)
 
-> 图中302行发现最终还是将所有属性解析出来的属性都保存到了`configuration`中
+> 图中302行发现最终还是将所有属性解析出来的属性都保存到了 `configuration`中
 > 
 > 至此解析完成，接下来创建 `SqlSessionFactory`
 
@@ -191,37 +190,40 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory20.jpg)
 
-> 我们回到最初被调用的`SqlSessionFactoryBuilder` 中的
+> 我们回到最初被调用的 `SqlSessionFactoryBuilder` 中的
 > 
-> 78行调用的`build`方法其实调用的是下面91行重载的`build`方法
+> 78行调用的 `build`方法其实调用的是下面91行重载的 `build`方法
 > 
-> 92行返回一个`DefaultSqlSessionFactory`实例，并将辛辛苦苦解析出来的`configuration`
+> 92行返回一个 `DefaultSqlSessionFactory`实例，并将辛辛苦苦解析出来的 `configuration`
 > 作为参数
 > 
-> 其实`DefaultSqlSessionFactory`是`SqlSessionFactory`的实现类，`SqlSessionFactory`
-> 是一个接口，这里将`DefaultSqlSessionFactory`作为实例返回给
+> 其实 `DefaultSqlSessionFactory`是 `SqlSessionFactory`的实现类，`SqlSessionFactory`
+> 是一个接口，这里将 `DefaultSqlSessionFactory`作为实例返回给
 > 
-> `SqlSessionFactory`
+>  `SqlSessionFactory`
+
+
+***
 
 
 ## 附加截图
 
 
-###### 这张图是由 `XMLStatementBuilder` 解析出来的一个select节点的信息（`mapperedStatement`）
+###### 这张图是由  `XMLStatementBuilder` 解析出来的一个select节点的信息（ `mapperedStatement`）
 
 ![](/img/in-post/mybatis-sqlsessionfactory.jpg)
 
-> 每一个增删改查的操作就是一个mapperedStatement
+> 每一个增删改查的操作就是一个 `mapperedStatement`
 
 
-###### 最终解析完成的configuration
+###### 最终解析完成的 `configuration`
 
 ![](/img/in-post/mybatis-sqlsessionfactory1.jpg)
 
 >  `configuration` 中保存了所有配置文件中详细信息
 >  
 
-######  `configutation` 中的 `mapperRegistry` 保存了 `konwnMappers`
+######  `configutation` 中的  `mapperRegistry` 保存了  `konwnMappers`
   
  ![](/img/in-post/mybatis-sqlsessionfactory2.jpg)
  
