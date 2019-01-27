@@ -12,22 +12,50 @@ tags:
   - Source Code
 ---
 
-> 整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建 `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
+>  总结：
+>  1、整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建 			  	            `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
 > 
-> `configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
+> 2、`configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
 
-***
 
 
   **`sqlSessionFactory` 初始化过程时序图**
   
   ![](/img/in-post/mybatis-sqlsessionfactory5.jpg)
 
+
 * Configuration:保存configuration配置文件中素有的配置文件
 * XMLConfigBuilder：解析Configuration配置文件
 * XMLMapperBuilder：解析Mapper配置文件
 * XMLStatementBuilder：解析增删改查标签
 * XPathParser：具体解析节点信息的类
+
+***
+
+
+
+#### 简单的运行代码
+
+> 由于是看源码，这里的只有两个查询方法和非常简单的配置
+
+
+###### 全局配置文件
+
+![](/img/in-post/mybatis-sqlsessionfactory7.jpg)
+
+###### `mapper` 接口
+
+![](/img/in-post/mybatis-sqlsessionfactory8.jpg)
+
+###### `mapper` 配置文件
+
+![](/img/in-post/mybatis-sqlsessionfactory9.jpg)
+
+###### 测试类
+
+![](/img/in-post/mybatis-sqlsessionfactory10.jpg)
+
+
 
 
 **这张图是由 `XMLStatementBuilder` 解析出来的一个select节点的信息（`mapperedStatement`）
