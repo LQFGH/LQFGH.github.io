@@ -12,15 +12,12 @@ tags:
   - Source Code
 ---
 
-#### 整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建  `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
-***
-
-
-#### `configuration` 贯穿整个初始化的流程，
+> 整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建 `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
+> 
+> `configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
 
 ***
 
-保存了所有配置文件的详细信息
 
   **`sqlSessionFactory` 初始化过程时序图**
   
@@ -30,7 +27,7 @@ tags:
 * XMLConfigBuilder：解析Configuration配置文件
 * XMLMapperBuilder：解析Mapper配置文件
 * XMLStatementBuilder：解析增删改查标签
-* XNode：将各种节点解析成对应的数据类型
+* XPathParser：具体解析节点信息的类
 
 
 **这张图是由 `XMLStatementBuilder` 解析出来的一个select节点的信息（`mapperedStatement`）
