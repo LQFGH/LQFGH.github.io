@@ -198,9 +198,8 @@ tags:
 > 作为参数
 > 
 > 其实 `DefaultSqlSessionFactory`是 `SqlSessionFactory`的实现类，`SqlSessionFactory`
-> 是一个接口，这里将 `DefaultSqlSessionFactory`作为实例返回给
-> 
->  `SqlSessionFactory`
+> 是一个接口，这里将 `DefaultSqlSessionFactory`作为实例返回给`SqlSessionFactory`
+
 
 
 ***
