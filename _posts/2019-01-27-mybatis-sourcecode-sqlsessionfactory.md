@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "MyBatis-原理"
-subtitle:   "sqlSessionFactory初始化"
+subtitle:   "sqlSessionFactory初始化原理"
 date:       2019-01-27 11:10
 author:     "LQFGH"
 header-img: "img/post-bg-halting.jpg"
@@ -27,7 +27,7 @@ tags:
   
   ![](/img/in-post/mybatis-sqlsessionfactory5.jpg)
 
-
+  * SqlSessionFactoryBuilder:创建SqlSessionFactory
 * Configuration:保存configuration配置文件中素有的配置文件
 * XMLConfigBuilder：解析Configuration配置文件
 * XMLMapperBuilder：解析Mapper配置文件
@@ -58,6 +58,39 @@ tags:
 ###### 测试类
 
 ![](/img/in-post/mybatis-sqlsessionfactory10.jpg)
+
+> 测试类中的创建sqlSessionFactory处打断点，作为程序的入口
+> 
+
+***
+
+## 断点走走
+
+
+> 接下来不会每一处代码都做说明，会跳过一些代码，只会在重要的地方截图说明
+> 
+> 需要注意的代码会用会标注出来
+> 
+> 另外特别注意下截图的代码是在哪一个类中
+> 
+> 请结合第一部分 `总结部分` 看接下来的内容，更容易理解
+
+###### 调用 `SqlSessionFactoryBuilder` 的build方法创建 `SqlSessionFactory`
+
+![](/img/in-post/mybatis-sqlsessionfactory11.jpg)
+
+> 注意下 `SqlSessionFactoryBuilder` 的方法就可以看出该类只是用于创建`SqlSessionFactory`，标出的第
+> 77行为创建**全局配置**文件解析的类，这里不多做介绍。重点是调用第78行中 `parser.parse()`调用全局配置文> 件解析。
+
+
+
+
+
+
+
+
+
+
 
 
 
