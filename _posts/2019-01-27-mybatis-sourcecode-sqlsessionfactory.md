@@ -12,7 +12,11 @@ tags:
   - Source Code
 ---
 
->  总结：
+#### 总结
+
+> **这里将总结放到前面的目的就是希望读者可以先了解整个的流程和重要代码的意义，以免在具体看的时候迷失方向**
+
+
 >  1、整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建 			  	            `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
 > 
 > 2、`configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
@@ -54,6 +58,7 @@ tags:
 ###### 测试类
 
 ![](/img/in-post/mybatis-sqlsessionfactory10.jpg)
+
 
 
 
