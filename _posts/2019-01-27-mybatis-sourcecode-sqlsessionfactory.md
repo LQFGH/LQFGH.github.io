@@ -179,39 +179,47 @@ tags:
 ![](/im/in-post/mybatis-sqlsessionfactory19.jpg)
 
 > 图中302行发现最终还是将所有属性解析出来的属性都保存到了`configuration`中
+> 
 > 至此解析完成，接下来创建 `SqlSessionFactory`
 
-###### 返回到`XMLConfigBuilder`中
+###### 返回到`SqlSessionFactoryBuilder` 类中
+
+![](/img/in-post/mybatis-sqlsessionfactory20.jpg)
+
+> 我们回到最初被调用的`SqlSessionFactoryBuilder` 中的
+> 
+> 78行调用的`build`方法其实调用的是下面91行重载的`build`方法
+> 
+> 92行返回一个`DefaultSqlSessionFactory`实例，并将辛辛苦苦解析出来的`configuration`
+> 作为参数
+> 
+> 其实`DefaultSqlSessionFactory`是`SqlSessionFactory`的实现类，`SqlSessionFactory`
+> 是一个接口，这里将`DefaultSqlSessionFactory`作为实例返回给
+> 
+> `SqlSessionFactory`
 
 
+## 附加截图
 
 
-**这张图是由 `XMLStatementBuilder` 解析出来的一个select节点的信息（`mapperedStatement`）
+###### 这张图是由 `XMLStatementBuilder` 解析出来的一个select节点的信息（`mapperedStatement`）
 
 ![](/img/in-post/mybatis-sqlsessionfactory.jpg)
 
 > 每一个增删改查的操作就是一个mapperedStatement
 
 
-**最终解析完成的configuration**
+###### 最终解析完成的configuration
 
 ![](/img/in-post/mybatis-sqlsessionfactory1.jpg)
 
 >  `configuration` 中保存了所有配置文件中详细信息
+>  
 
- **`configutation` 中的 `mapperRegistry` 保存了 `konwnMappers`**
- 
-> `konwnMappers` 保存了 `mapper` 接口和对应的 `mapper` 代理工厂的对应
- 
+######  `configutation` 中的 `mapperRegistry` 保存了 `konwnMappers`
+  
  ![](/img/in-post/mybatis-sqlsessionfactory2.jpg)
  
- 
- **最终返回 `sqlSessionFactory` 接口的实现类 `DefaultSqlSessionFactory`**
- 
- ![](/img/in-post/mybatis-sqlsessionfactory3.jpg)
- 
- ![](/img/in-post/mybatis-sqlsessionfactory4.jpg)
- 
- > 最终将Configuration 返回给 `SqlSessionFactoryBuilder` 的 `build` 方法 ，build创建了 `DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
+> `konwnMappers` 保存了 `mapper` 接口和对应的 `mapper` 代理工厂的对应
  
  
