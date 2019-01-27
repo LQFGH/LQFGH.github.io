@@ -27,12 +27,13 @@ tags:
   
   ![](/img/in-post/mybatis-sqlsessionfactory5.jpg)
 
-  * SqlSessionFactoryBuilder:创建SqlSessionFactory
-* Configuration:保存configuration配置文件中素有的配置文件
-* XMLConfigBuilder：解析Configuration配置文件
-* XMLMapperBuilder：解析Mapper配置文件
-* XMLStatementBuilder：解析增删改查标签
-* XPathParser：具体解析节点信息的类
+  * `SqlSessionFactoryBuilder`:创建`SqlSessionFactory`
+* `Configuration`:保存`configuration`配置文件中素有的配置文件
+* `XMLConfigBuilder`：解析`Configuration`配置文件
+* `XMLMapperBuilder`：解析`Mapper`配置文件
+* `XMLStatementBuilder`：解析增删改查标签
+* `XPathParser`：具体解析节点信息的类
+* `MapperBuilderAssistant`:是`XMLMapperBuilder`解析`Mapper.xml`时用到一个帮助类,实现一部分逻辑处理和处理过程中的上下文保存。
 
 ***
 
@@ -79,8 +80,11 @@ tags:
 
 ![](/img/in-post/mybatis-sqlsessionfactory11.jpg)
 
-> 注意下 `SqlSessionFactoryBuilder` 的方法就可以看出该类只是用于创建`SqlSessionFactory`，标出的第
-> 77行为创建**全局配置**文件解析的类，这里不多做介绍。重点是调用第78行中的 `parser.parse()`调用，进行全> 局配置文件解析。
+> 注意下 `SqlSessionFactoryBuilder` 的方法就可以看出该类只是用于创建`SqlSessionFactory`，
+> 
+> 标出的第77行为创建**全局配置**文件解析的类，这里不多做介绍。重点是调用第78行中的
+> 
+>  `parser.parse()`调用，进行全局配置文件解析。
 
 ###### 调用 `XMLConfigBuilder` 的全局配置文件解析方法
 ![](/img/in-post/mybatis-sqlsessionfactory12.jpg)
@@ -92,21 +96,25 @@ tags:
  parsed = true;
 ```
 
-> 代码用于判断当前 `XMLConfigBuilder` 实例是否执行过，每个实例只能执行一次，因为全局配置文件指挥被解析一> 次即可，如果没有解析过就将标志置为`true`,开始解析。
+> 代码用于判断当前 `XMLConfigBuilder` 实例是否执行过，每个实例只能执行一次，因为全局配置文件指挥被解析一
+> 
+> 次即可，如果没有解析过就将标志置为`true`,开始解析。
 
 ```java
   parseConfiguration(parser.evalNode("/configuration"));
 ```
 
 > 这一行代码调用当前类中解析配置文件的方法 `parser.evalNode("/configuration")` 是
+> 
 > 解析全局配置文件中 `configuration` 节点，parseConfiguration方法就在当前方法下面。
 
 
 ###### 解析全局配置文件 
 
-![](img/in-post/mybatis-sqlsessionfactory13.jpg)
+![](/img/in-post/mybatis-sqlsessionfactory13.jpg)
 
 > 该方法主要用来解析全局配置文件中的每一个标签，其他标签不做说明，`mapper` 标签的解析说明下
+> 
 > 接下来进入118行的方法
 
 ###### 解析 `mapper` 标签
@@ -114,13 +122,66 @@ tags:
 ![](/img/in-post/mybatis-sqlsessionfactory14.jpg)
 
 > 357行代码由于我的全局配置文件中`mapper`配置的是`resource`所以直接进入`else`
+> 
 > 366行根据`mapper`标签的`resource`获取的`mapper`配置文件的路径，将`mapper`一流的形式读取
+> 
 > 367行创建`mapper`配置文件解析器
+> 
 > 接下来进入368行接下`mapper`配置文件
+> 
 
-###### 解析`mapper`配置文件
+###### 进入`mapper`配置文件解析
+
+![](/img/in-post/mybatis-sqlsessionfactory15.jpg)
+
+> **这里注意下**，代码已经从`XMLConfigBuilder` 进入到了 `XMLMapperBuilder`
+> 
+> 进入到92行方法看看具体解析mapper配置文件
+
+######  `mapper`配置文件的解析
+
+![](/img/in-post/mybatis-sqlsessionfactory16.jpg)
+
+> 可以看到这个方法是对mapper配置文件的各个标签解析，我们进入118行看看具体的增删改查的解析。
+> 
 
 
+###### 调用 `select|insert|update|delete` 解析
+
+![](/img/in-post/mybatis-sqlsessionfactory17.jpg)
+
+> 125行处由于我没有配置 `databaseId` 所以获取到`configuration.getDatabaseId()`
+> 
+> 为空，不进入判断。
+> 
+> 那么接下来进入128行进行 `select|insert|update|delete` 解析到图中131行方法
+> 
+> 133行创建`select|insert|update|delete` 解析器
+> 
+> 135行进入正真的`select|insert|update|delete`解析
+
+
+###### 解析 `select|insert|update|delete` 
+
+**这个方法有比较长，只截了下半部分，上半部分是对标签中属性的解析**
+
+![](/img/in-post/mybatis-sqlsessionfactory18.jpg)
+
+> 从这里已经进入到 `builderAssistant` 类中
+> 
+> 109行将所有解析的属性添加到 `builderAssistant` 中(最终都会保存到`configuration`中)
+> 
+> 进入到109中保存属性方法中
+> 
+
+###### 属性去了哪里
+
+![](/im/in-post/mybatis-sqlsessionfactory19.jpg)
+
+> 图中302行发现最终还是将所有属性解析出来的属性都保存到了`configuration`中
+> 至此解析完成，接下来创建 `SqlSessionFactory`
+
+###### 返回到`XMLConfigBuilder`中
 
 
 
