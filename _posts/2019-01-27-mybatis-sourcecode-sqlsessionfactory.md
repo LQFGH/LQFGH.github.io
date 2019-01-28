@@ -25,7 +25,7 @@ tags:
 >  1、整个 `sqlSessionFactory` 的过程就是把 配置文件的信息解析并存放到 `Configuration` 中，并创建`DefaultSqlSessionFactory` 实例返回给 `sqlSessionFactory`
 > 
 >  2、`configuration` 贯穿整个初始化的流程，保存了所有配置文件的详细信息
-
+>  
 
 
   **`sqlSessionFactory` 初始化过程时序图**
