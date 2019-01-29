@@ -33,7 +33,7 @@ tags:
   ![](/img/in-post/mybatis-sqlsessionfactory5.jpg)
 
   * `SqlSessionFactoryBuilder`:创建`SqlSessionFactory`
-* `Configuration`:保存`configuration`配置文件中素有的配置文件
+* `Configuration`:保存`configuration`配置文件中所有的配置文件
 * `XMLConfigBuilder`：解析`Configuration`配置文件
 * `XMLMapperBuilder`：解析`Mapper`配置文件
 * `XMLStatementBuilder`：解析增删改查标签
@@ -180,7 +180,7 @@ tags:
 
 ###### 属性去了哪里
 
-![](/im/in-post/mybatis-sqlsessionfactory19.jpg)
+![](/img/in-post/mybatis-sqlsessionfactory19.jpg)
 
 > 图中302行发现最终还是将所有属性解析出来的属性都保存到了 `configuration`中
 > 
