@@ -80,7 +80,7 @@ tags:
 
 ![](/img/in-post/mybatis-mapper3.jpg)
 
-> 实际上 `mapperRegistry`中存放的是接口和创建其代理的工厂的 `map`
+> 实际上 `mapperRegistry`中存放的是接口和创建其代理的工厂的 `knownMappers`
 > 
 >   `mapperRegistry` 是创建 `sqlSesssionFactory` 时创建的
 >  
