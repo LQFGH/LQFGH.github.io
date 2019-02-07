@@ -51,3 +51,78 @@ tags:
 ###### 测试类
 
 ![](/img/in-post/mybatis-mapper.jpg)
+
+> 测试类中的 ` sqlSession.getMapper(EmployeeMapper.class)`处打断点，作为程序的入口
+> 
+
+***
+
+## 断点走走
+
+
+###### 调用 ` sqlSession.getMapper(EmployeeMapper.class)` 
+
+![](/img/in-post/mybatis-mapper1.jpg)
+
+> 进入` sqlSession.getMapper(EmployeeMapper.class)` 方法看到调用的是 `sqlSession`
+> 
+> 中 `configuration` 的 `getMapper` 方法
+> 
+
+###### 调用 `configuration` 的 `getMapper` 方法
+
+
+![](/img/in-post/mybatis-mapper2.jpg)
+
+> 我们发现在 `configuration` 中调用的是其属性 `mapperRegistry` 的 `getMapper`
+> 方法，那 `mapperRegistry`是什么呢?
+> 
+
+![](img/in-post/mybatis-mapper3.jpg)
+
+> 实际上 `mapperRegistry`中存放的是接口和创建其代理的工厂的 `map`
+> 
+>   `mapperRegistry` 是创建 `sqlSesssionFactory` 时创建的
+>  
+> 接下来进入 `getMapper` 方法
+> 
+
+###### `MapperProxyFactory`  中获取 `MapperProxy` 代理
+
+![](/img/in-post/mybatis-mapper4.jpg)
+
+> 正如上面所说，45 行从 `knownMappers` 中的 `knownMappers` 中获取 `MapperProxyFactory`
+>
+>  50 行 从 `MapperProxyFactory` 中获取 `MapperProxy` 对象
+>  
+> 接下来进入 `MapperProxyFactory` 
+> 
+
+
+###### `MapperProxyFactory`  中创建 `MapperProxy` 代理
+
+![](/img/in-post/mybatis-mapper5.jpg)
+
+
+> 图中51 行处创建  `MapperProxy` 对象
+> 
+> 52 行调用46行的 `newInstance` 方法
+> 
+> 47行调用原生的`jdk` 的 `Proxy` 类创建代理对象
+> 
+> 接下来进入51 行看看 `MapperProx` 是什么
+> 
+
+
+###### `MapperProxy` 代理类
+
+
+![](/img/in-post/mybatis-mapper6.jpg)
+
+> 图中30 行，`MapperProxy` 实现了 jdk 原生的代理接口
+> 
+> 实现了 `invoke` 方法，在调用代理对象的方法时会调用 `invoke`方法
+> 
+> 至此创建代理对象完毕，一步步将代理对象返回
+> 
+
