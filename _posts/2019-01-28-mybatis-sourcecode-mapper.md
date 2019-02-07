@@ -52,7 +52,7 @@ tags:
 
 ![](/img/in-post/mybatis-mapper.jpg)
 
-> 测试类中的 ` sqlSession.getMapper(EmployeeMapper.class)`处打断点，作为程序的入口
+> 测试类中的 `sqlSession.getMapper`处打断点，作为程序的入口
 > 
 
 ***
@@ -60,7 +60,7 @@ tags:
 ## 断点走走
 
 
-###### 调用 ` sqlSession.getMapper(EmployeeMapper.class)` 
+###### 调用  `sqlSession.getMapper` 
 
 ![](/img/in-post/mybatis-mapper1.jpg)
 
@@ -69,7 +69,7 @@ tags:
 > 中 `configuration` 的 `getMapper` 方法
 > 
 
-###### 调用 `configuration` 的 `getMapper` 方法
+###### 调用  `configuration` 的 `getMapper` 方法
 
 
 ![](/img/in-post/mybatis-mapper2.jpg)
@@ -78,7 +78,7 @@ tags:
 > 方法，那 `mapperRegistry`是什么呢?
 > 
 
-![](img/in-post/mybatis-mapper3.jpg)
+![](/img/in-post/mybatis-mapper3.jpg)
 
 > 实际上 `mapperRegistry`中存放的是接口和创建其代理的工厂的 `map`
 > 
