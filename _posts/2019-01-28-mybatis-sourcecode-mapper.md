@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "MyBatis-原理"
-subtitle:   "创建代理对象"
+subtitle:   "创建mapper代理对象"
 date:       2019-02-01 11:10
 author:     "LQFGH"
 header-img: "img/post-bg-halting.jpg"
