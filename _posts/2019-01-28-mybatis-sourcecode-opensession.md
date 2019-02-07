@@ -134,6 +134,8 @@ tags:
 
 ###### 返回 `DefaultSqlSessionFactory` 
 
+![](/img/in-post/mybatis-sqlsession3.jpg)
+
 > 返回最初 `DefaultSqlSessionFactory` 中的 `openSessionFromDataSource`方法
 > 
 > 97行，将 整个mybatis生命周期都很重要的 `configuration` 和 `创建SqlSession` 很重要的 
