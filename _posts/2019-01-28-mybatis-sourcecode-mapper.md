@@ -20,12 +20,16 @@ tags:
 
 > **这里将总结放到前面的目的就是希望读者可以先了解整个的流程和重要代码的意义，以免在具体看的时候迷失方向**
 > 
-> 
-> 
 > **在这个过程中还是希望读者可以跟随本文打断点亲自看下源码，体会很更深些**
 > 
 
+**`SqlSession` 初始化过程时序图**
+  
+  ![](/img/in-post/mybatis-mapper10.jpg)
 
+* `Configuration`:保存`configuration`配置文件中所有的配置文件
+* `DefaultSqlSessionFactory` 创建`SqlSession` 的工厂类
+* `Executor` 是执行增删改查等方法最基础的方法，底层执行增删改查还是要调用`Executor`的类的方法的实现
 
 ***
 
