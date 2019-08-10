@@ -27,7 +27,7 @@ tags:
   XXXProperties：封装配置信息
 ```
 
-![1565460282633](../img/in-post/1565460282633.png)
+![1565460282633](/img/in-post/1565460282633.png)
 
 > 1、其实 `spring boot` 是基于 `spring` 注解版进行进一步封装的
 
@@ -135,7 +135,7 @@ tags:
 <version>3.4.1</version></dependency>
 ```
 
-![1565464227915](../img/in-post/1565464227915.png)
+![1565464227915](/img/in-post/1565464227915.png)
 
 > 资源引入地址 ：http://localhost:8002/webjars/jquery/3.4.1/jquery.js
 
