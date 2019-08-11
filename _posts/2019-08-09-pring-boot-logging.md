@@ -13,8 +13,15 @@ tags:
 
 ***
 
+
+
+[TOC]
+
+------
+
+
+
 > 今天我们就来说说 `spring boot` 的日志使用
-> 
 
 #### 1、日志的输出格式
 
@@ -106,7 +113,7 @@ logging.pattern.file=%d{yyyy-MM-dd} [%thread] %-5level %logger{50} - %msg%n
 > `spring boot`  默认使用 `slf4j+logback` 的组合,所以配置 `spring boot` 日志直接加入 `logback` 配置文件即可
 
 
-![](../img/in-post/1565366105(1).jpg)
+![](/img/in-post/1565366105(1).jpg)
 
 
 > 接下来我们将logback切换为 `slf4j+log4j`，这里只是为了切换而切换，实际上将日志切换为 `log4j` 毫无意义

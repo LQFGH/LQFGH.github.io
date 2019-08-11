@@ -13,8 +13,17 @@ tags:
 
 ***
 
+
+
+[TOC]
+
+
+
+------
+
+
+
 > 今天主要就来说说怎么不使用IDE的向导搭建一个 `eureka` ，还有注册中心的基本配置
-> 
 
 
 ###### 创建一个简单的 `maven` 项目
@@ -333,7 +342,7 @@ eureka:
       defaultZone: http://eureka7001server.com:7001/eureka/,http://eureka7002server.com:7002/eureka/,http://eureka7003server.com:7003/eureka/
  
  ```
- 
+
  > **最终效果**
  > 
  > 由于篇幅原因,我这里只放出 `eureka-server-7001` 的截图
