@@ -250,7 +250,8 @@ tags:
 @ConfigurationProperties(prefix = "spring.thymeleaf")
 public class ThymeleafProperties {
     private static final Charset DEFAULT_ENCODING = Charset.forName("UTF-8"); 
-    private static final MimeType DEFAULT_CONTENT_TYPE = 		                  MimeType.valueOf("text/html");
+    private static final MimeType DEFAULT_CONTENT_TYPE =
+        MimeType.valueOf("text/html");
     public static final String DEFAULT_PREFIX = "classpath:/templates/";
     public static final String DEFAULT_SUFFIX = ".html";
 ```
@@ -346,8 +347,9 @@ public static class WebMvcAutoConfigurationAdapter extends WebMvcConfigurerAdapt
 
 我们看看这里的 `@Import(EnableWebMvcConfiguration.class)` 注入容器中的组件是什么
 
-```
-@Configurationpublic static class EnableWebMvcConfiguration extends DelegatingWebMvcConfiguration {
+```java
+@Configuration
+public static class EnableWebMvcConfiguration extends DelegatingWebMvcConfiguration {
 ```
 
 然后看 `DelegatingWebMvcConfiguration` 类，类中有这样一个方法
@@ -452,10 +454,10 @@ public class WebMvcAutoConfiguration {
 ```yml
 server:
 	port: 8080
-    context-path: spring-boot
+	context-path: spring-boot
     tomcat:
-		max-connections: 10
-   		uri-encoding: utf-8
+    	max-connections: 10
+    	uri-encoding: utf-8
 ```
 
 
@@ -617,7 +619,7 @@ public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(){
 
 > 每种组件对应一种 `xxxRegistrationBean` 类，只需要在 `IOC` 容器中添加组件对应的  `RegistrationBean` 即可
 
-<br/>
+
 
 `spring boot`注入组件的例子
 
@@ -671,3 +673,136 @@ public ServletRegistrationBean dispatcherServletRegistration(
         <artifactId>spring-boot-starter-undertow</artifactId>
 </dependency>
 ```
+
+
+
+#### 5）嵌入式 `servlet` 自动配置原理
+
+```java
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@Configuration
+@ConditionalOnWebApplication
+@Import(BeanPostProcessorsRegistrar.class)
+public class EmbeddedServletContainerAutoConfiguration {
+    
+	/**
+	 * Nested configuration if Tomcat is being used.
+	 */
+	@Configuration
+	@ConditionalOnClass({ Servlet.class, Tomcat.class })
+	@ConditionalOnMissingBean(value = EmbeddedServletContainerFactory.class, search
+                              = SearchStrategy.CURRENT)
+	public static class EmbeddedTomcat {
+
+		@Bean
+		public TomcatEmbeddedServletContainerFactory
+            tomcatEmbeddedServletContainerFactory() {
+			return new TomcatEmbeddedServletContainerFactory();
+		}
+
+	}
+
+	/**
+	 * Nested configuration if Jetty is being used.
+	 */
+	@Configuration
+	@ConditionalOnClass({ Servlet.class, Server.class, Loader.class,
+			WebAppContext.class })// 当前有相关的依赖
+    //容器中没有注入 EmbeddedServletContainerFactory 嵌入式容器工厂
+	@ConditionalOnMissingBean(value = EmbeddedServletContainerFactory.class, search
+                              = SearchStrategy.CURRENT)
+	public static class EmbeddedJetty {
+
+		@Bean
+		public JettyEmbeddedServletContainerFactory 
+            jettyEmbeddedServletContainerFactory() {
+			return new JettyEmbeddedServletContainerFactory();
+		}
+
+	}
+
+	/**
+	 * Nested configuration if Undertow is being used.
+	 */
+	@Configuration
+	@ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class })
+	@ConditionalOnMissingBean(value = EmbeddedServletContainerFactory.class, search
+                              = SearchStrategy.CURRENT)
+	public static class EmbeddedUndertow {
+
+		@Bean
+		public UndertowEmbeddedServletContainerFactory 
+            undertowEmbeddedServletContainerFactory() {
+			return new UndertowEmbeddedServletContainerFactory();
+		}
+
+	}
+
+	/**
+	 * Registers a {@link EmbeddedServletContainerCustomizerBeanPostProcessor}.
+     Registered
+	 * via {@link ImportBeanDefinitionRegistrar} for early registration.
+	 */
+	public static class BeanPostProcessorsRegistrar
+			implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
+
+		private ConfigurableListableBeanFactory beanFactory;
+
+		@Override
+		public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+			if (beanFactory instanceof ConfigurableListableBeanFactory) {
+				this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
+			}
+		}
+
+		@Override
+		public void registerBeanDefinitions(AnnotationMetadata
+                                            importingClassMetadata,
+				BeanDefinitionRegistry registry) {
+			if (this.beanFactory == null) {
+				return;
+			}
+			registerSyntheticBeanIfMissing(registry,
+					"embeddedServletContainerCustomizerBeanPostProcessor",
+					EmbeddedServletContainerCustomizerBeanPostProcessor.class);
+			registerSyntheticBeanIfMissing(registry,
+					"errorPageRegistrarBeanPostProcessor",
+					ErrorPageRegistrarBeanPostProcessor.class);
+		}
+
+		private void registerSyntheticBeanIfMissing(BeanDefinitionRegistry registry,
+				String name, Class<?> beanClass) {
+			if (ObjectUtils.isEmpty(
+					this.beanFactory.getBeanNamesForType(beanClass, true, false))) {
+				RootBeanDefinition beanDefinition = new 
+                    RootBeanDefinition(beanClass);
+				beanDefinition.setSynthetic(true);
+				registry.registerBeanDefinition(name, beanDefinition);
+			}
+		}
+
+	}
+
+}
+
+```
+
+> 第 12 、31、48 行当容器中没有没有 `EmbeddedServletContainerFactory` 组件才会注入相应的 `servet ` 容器.
+>
+> 第11、 30、48 行只有引入了响应容器的依赖才会导入对应的容器
+
+
+
+容器工厂的作用
+
+```java
+public interface EmbeddedServletContainerFactory {
+ 
+    EmbeddedServletContainer getEmbeddedServletContainer(
+        ServletContextInitializer... initializers);
+}
+```
+
+> 只有一个方法,就是获取 `servlet` 容器
+
+![1565541029115](/img/in-post/1565541029115.png)
