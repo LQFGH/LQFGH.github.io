@@ -806,3 +806,149 @@ public interface EmbeddedServletContainerFactory {
 > 只有一个方法,就是获取 `servlet` 容器
 
 ![1565541029115](/img/in-post/1565541029115.png)
+
+我们就以 `tomcat` 对 `TomcatEmbeddedServletContainerFactory`  接口的实现`TomcatEmbeddedServletContainerFactory` 为例
+
+![1565622344209](/img/in-post/1565622344209.png)
+
+> `TomcatEmbeddedServletContainerFactory` 实现了 `getEmbeddedServletContainer` 的抽象方法，设置了 `Tomcat` 中的属性，并返回。
+
+
+
+看下 `getTomcatEmbeddedServletContainer` 方法
+
+```java
+protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(
+    Tomcat tomcat) {
+    return new TomcatEmbeddedServletContainer(tomcat, getPort() >= 0);
+}
+```
+
+> 这里直接 创建了 `TomcatEmbeddedServletContainer`  实例，看看具体是怎么创建的
+
+![1565622722605](/img/in-post/1565622722605.png)
+
+
+
+> 创建容器时调用了 `initialize` 方法，在 `initialize` 方法中调用了 `tomcat.start()` 启动 `tomcat`
+
+
+
+那我们对容器的配置是怎么生效的呢？
+
+- 配置 `ServerProperties`
+
+```yml
+server:
+	port: 8080
+    context-path: /spring-boot
+```
+
+- 实现 `EmbeddedServletContainerCustomizer` 并将其添加到容器中 
+
+> 上面 2）中有相关代码，这里就不贴出来了
+
+
+
+配置生效原理解析
+
+```java
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@Configuration
+@ConditionalOnWebApplication
+@Import(BeanPostProcessorsRegistrar.class)
+public class EmbeddedServletContainerAutoConfiguration {
+```
+
+`EmbeddedServletContainerAutoConfiguration` 自动配置类的 `@Import(BeanPostProcessorsRegistrar.class)` 导入了一个组件 `BeanPostProcessorsRegistrar`，其实就是 `EmbeddedServletContainerAutoConfiguration` 的静态内部类， 接下来我们看下这个类是个什么东西
+
+```java
+public static class BeanPostProcessorsRegistrar
+    implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
+    private ConfigurableListableBeanFactory beanFactory;
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        if (beanFactory instanceof ConfigurableListableBeanFactory) {
+            this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
+        }
+    }
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+                                        BeanDefinitionRegistry registry) {
+        if (this.beanFactory == null) {
+            return;
+        }
+        registerSyntheticBeanIfMissing(registry,
+                               "embeddedServletContainerCustomizerBeanPostProcessor",
+						EmbeddedServletContainerCustomizerBeanPostProcessor.class);
+        registerSyntheticBeanIfMissing(registry,
+                                       "errorPageRegistrarBeanPostProcessor",
+                                       ErrorPageRegistrarBeanPostProcessor.class);
+    }
+    private void registerSyntheticBeanIfMissing(BeanDefinitionRegistry registry,
+                                                String name, Class<?> beanClass) {
+        if (ObjectUtils.isEmpty(this.beanFactory.getBeanNamesForType(beanClass, true,
+                                                                     false))) {
+            RootBeanDefinition beanDefinition = new RootBeanDefinition(beanClass);
+            beanDefinition.setSynthetic(true);
+            registry.registerBeanDefinition(name, beanDefinition);
+        }
+    }
+}
+```
+
+`BeanPostProcessorsRegistrar` 实现了 `ImportBeanDefinitionRegistrar` ，`ImportBeanDefinitionRegistrar` 是`spring` 中很重要的组件 ，实现其 `registerBeanDefinitions` 方法用于在 `IOC` 容器中注入组件，可以看到实现的方法中注入了 `EmbeddedServletContainerCustomizerBeanPostProcessor` ，那这个类又是干什么的呢？
+
+```java
+public class EmbeddedServletContainerCustomizerBeanPostProcessor
+    implements BeanPostProcessor, BeanFactoryAware {
+```
+
+`EmbeddedServletContainerCustomizerBeanPostProcessor` 实现了 `BeanPostProcessor` 接口，这个接口是
+
+`spring` 中非常重要的一个接口，该接口又两个方法，`postProcessBeforeInitialization` 和 `postProcessAfterInitialization`，分别在 `bean` 被创建了，但是没有赋初始值的前后被调用，接下来看看 `postProcessBeforeInitialization` 方法中做了什么。
+
+```java
+@Overridepublic Object postProcessBeforeInitialization(Object bean, String beanName)
+    throws BeansException {
+    if (bean instanceof ConfigurableEmbeddedServletContainer) {
+        postProcessBeforeInitialization((ConfigurableEmbeddedServletContainer) bean);
+    }
+    return bean;
+}
+```
+
+该方法中调用了所有的 同类中的 `postProcessBeforeInitialization` ，接下来看该方法
+
+```java
+private void postProcessBeforeInitialization(
+    ConfigurableEmbeddedServletContainer bean) {
+    for (EmbeddedServletContainerCustomizer customizer : getCustomizers()) {
+        customizer.customize(bean);
+    }
+}
+```
+
+在该方法中调用了便利调用了所有 `EmbeddedServletContainerCustomizer` 类型的组件的 `customize` 方法，而对于自动配置和我们自定义配置 `servlet` 类型的组件都是 `EmbeddedServletContainerCustomizer`  类型的
+
+**自定义配置**
+
+```java
+@Bean
+public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(){
+    return container -> {
+        container.setPort(8082);
+        container.setContextPath("/boot");
+    };
+}
+```
+
+**自动配置**
+
+```java
+private static class DuplicateServerPropertiesDetector implements
+    EmbeddedServletContainerCustomizer, Ordered, ApplicationContextAware {
+```
+
+> 不管是自动配置还是自定义配置都是 `EmbeddedServletContainerCustomizer` 类型的组件，并且都实现了 `customize` 方法，所以 自动配置和自定义配置都会生效，只不过自动配置设置的优先级要低于自定义配置的优先级，所以自定义配置的属性会覆盖自动配置的属性，而自定义配置没有配置的属性会使用自动配置的属性
+
