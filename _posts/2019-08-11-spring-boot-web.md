@@ -37,7 +37,7 @@ tags:
   XXXProperties：封装配置信息
 ```
 
-![1565460282633](../img/in-post/1565460282633.png)
+![1565460282633](/img/in-post/1565460282633.png)
 
 > 1、其实 `spring boot` 是基于 `spring` 注解版进行进一步封装的
 
@@ -149,7 +149,7 @@ tags:
 <version>3.4.1</version></dependency>
 ```
 
-![1565464227915](../img/in-post/1565464227915.png)
+![1565464227915](/img/in-post/1565464227915.png)
 
 > 资源引入地址 ：http://localhost:8002/webjars/jquery/3.4.1/jquery.js
 
@@ -208,7 +208,7 @@ tags:
 
 - `thyeamleaf` 版本可以在 `GitHub` 上看到
 
-![1565512481604](../img/in-post/1565512481604.png)
+![1565512481604](/img/in-post/1565512481604.png)
 
 
 
@@ -225,7 +225,7 @@ tags:
 
 - `spring boot` 官网文档修改 `thyeamleaf` 版本
 
-![1565512552682](../img/in-post/1565512552682.png)
+![1565512552682](/img/in-post/1565512552682.png)
 
 
 
@@ -238,7 +238,7 @@ tags:
 
 > 我这里直接使用 `github` 上最新的版本
 
-![1565513389955](../img/in-post/1565513389955.png)
+![1565513389955](/img/in-post/1565513389955.png)
 
 > 需要注意的是 `thymeleaf` 3版本需要适配 `thymeleaf-layout` 2版本
 
@@ -270,7 +270,7 @@ public class ThymeleafProperties {
 
 `spring boot` [官方文档](https://docs.spring.io/spring-boot/docs/2.1.0.BUILD-SNAPSHOT/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc)对 `springmvc`  自动配置的说明
 
-![1565516463485](../img/in-post/1565516463485.png)
+![1565516463485](/img/in-post/1565516463485.png)
 
 > 想要添加相应的组件，只需要在容器中注入该组件即可
 
@@ -389,7 +389,7 @@ void addInterceptors(InterceptorRegistry registry) {
 
 再点进去第4行，是一个接口的抽象方法
 
-![1565526818398](../img/in-post/1565526818398.png)
+![1565526818398](/img/in-post/1565526818398.png)
 
 点进去图中的类中
 
@@ -410,7 +410,7 @@ void addInterceptors(InterceptorRegistry registry) {
 
 由图中红色部分可以看出，若想要让自动配置全部失效，而使用我们自己的配置，则需要在配置类上添加 `@EnableWebMvc` 注解
 
-![1565527323790](../img/in-post/1565527323790.png)
+![1565527323790](/img/in-post/1565527323790.png)
 
 > 若想检验，可以根据 `spring boot` 给我们配置的 `webjars` 映射测试下，加 `@EnableWebMvc` 和不加看能否访问到 `webjars` 引入的资源
 
@@ -445,7 +445,7 @@ public class WebMvcAutoConfiguration {
 
 `spring boot` 默认为我们引入的是 `tomcat` 作为嵌入式 `servlet` 容器
 
-![1565532365311](../img/in-post/1565532365311.png)
+![1565532365311](/img/in-post/1565532365311.png)
 
 
 
@@ -650,7 +650,7 @@ public ServletRegistrationBean dispatcherServletRegistration(
 
 `spring boot` 支持 `Tomcat` `Jetty` `Undertow` 三个`servlet` 容器
 
-![1565539251549](../img/in-post/1565539251549.png)
+![1565539251549](/img/in-post/1565539251549.png)
 
 - jetty：长连接引用，如聊天
 - undertow：高并发
@@ -805,11 +805,11 @@ public interface EmbeddedServletContainerFactory {
 
 > 只有一个方法,就是获取 `servlet` 容器
 
-![1565541029115](../img/in-post/1565541029115.png)
+![1565541029115](/img/in-post/1565541029115.png)
 
 我们就以 `tomcat` 对 `TomcatEmbeddedServletContainerFactory`  接口的实现`TomcatEmbeddedServletContainerFactory` 为例
 
-![1565622344209](../img/in-post/1565622344209.png)
+![1565622344209](/img/in-post/1565622344209.png)
 
 > `TomcatEmbeddedServletContainerFactory` 实现了 `getEmbeddedServletContainer` 的抽象方法，设置了 `Tomcat` 中的属性，并返回。
 
@@ -826,7 +826,7 @@ protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(
 
 > 这里直接 创建了 `TomcatEmbeddedServletContainer`  实例，看看具体是怎么创建的
 
-![1565622722605](../img/in-post/1565622722605.png)
+![1565622722605](/img/in-post/1565622722605.png)
 
 
 
