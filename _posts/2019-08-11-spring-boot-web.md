@@ -1085,3 +1085,39 @@ private void createEmbeddedServletContainer() {
 - 缺点：默认不支持 `jsp` 、优化定制比较复杂
 
 外置 `servlet` 容器：外面安装类似 `Tomcat` --将应用打成 `war` 包，部署在 `servlet` 容器中
+
+**步骤**
+
+- 创建一个 `war` 项目，搭建好 `web` 项目的目录机构
+- 将嵌入式 `Tomcat` 容器指定为 `provide`
+
+```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+```
+
+- 必须编写一个**SpringBootServletInitializer**的子类，并调用主配置类
+
+```java
+public class ServletInitializer extends SpringBootServletInitializer {
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(WarJspApplication.class);
+    }
+}
+```
+
+```java
+@SpringBootApplication
+public class WarJspApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(WarJspApplication.class,args);
+    }
+}
+```
+
