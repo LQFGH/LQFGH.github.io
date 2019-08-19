@@ -54,9 +54,11 @@ spring:
 
 ```
 
+------
 
 
-#### 三：自动配置原理
+
+#### 二：自动配置原理
 
 - 自动配置类：`DataSourceAutoConfiguration`
 
@@ -202,3 +204,165 @@ class DataSourceInitializer implements ApplicationListener<DataSourceInitialized
 `runDataScripts()` 初始化所有 `classpath` 目录下 `data.sql` 、`data-all.sql`脚本和配置文件中配置的 `spring.datasource.data` 的脚本
 
 该类中还有一个 `init` 方法，标注了 `@PostConstruct` 注解，该注解是 `JRS250` 规范的注解就相当于`spring`中创建bean时指定的 `init-method` 方法（构造器之后）
+
+------
+
+
+
+#### 三：`druid` 配置
+
+###### 1）添加依赖
+
+```xml
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+```
+
+
+
+###### 2）属性配置
+
+```yml
+spring:
+  application:
+    name: boot-jdbc
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+  druid:
+    url: jdbc:mysql://liqingfeng.com:3306/springboot?useSSL=false
+    username: root
+    password: 1230
+    initial-size: 1
+    min-idle: 1
+    max-active: 5
+    max-wait: 3000
+    use-unfair-lock: true
+    time-between-eviction-runs-millis: 10000
+    min-evictable-idle-time-millis: 30000
+    validation-query: select '1'
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    use-global-data-source-stat: true
+    max-pool-prepared-statement-per-connection-size: 10
+    filters: stat,wall,slf4j
+    pool-prepared-statements: true
+
+```
+
+> 这里的 `filters` 一定要配置，否则 `druid` 的 `SQL` 不能生效
+
+
+
+###### 3）让配置的属性生效
+
+```java
+    @ConfigurationProperties(prefix = "spring.druid")
+    @Bean
+    public DruidDataSource druidDataSource(){
+        return new DruidDataSource();
+    }
+```
+
+> 主要是添加 `@ConfigurationProperties` 注解
+
+
+
+4）配置 `druid` 监控
+
+```java
+    @Bean
+    public ServletRegistrationBean statViewServlet(){
+        ServletRegistrationBean servletRegistrationBean = new
+            ServletRegistrationBean(new StatViewServlet(),"/druid/*");
+        Map<String,String> initParams = new HashMap<String,String>(6);
+        initParams.put("loginUsername","admin");
+        initParams.put("loginPassword","admin");
+        initParams.put("allow","");
+        servletRegistrationBean.setInitParameters(initParams);
+        return servletRegistrationBean;
+    }
+    
+    @Bean
+    public FilterRegistrationBean webStatFilter(){
+        FilterRegistrationBean filterRegistrationBean = new
+            FilterRegistrationBean(new WebStatFilter());
+        filterRegistrationBean.addInitParameter("exclusions","*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
+        filterRegistrationBean.addInitParameter("sessionStatEnable","true");
+        filterRegistrationBean.addInitParameter("profileEnable","true");
+        filterRegistrationBean.addInitParameter("principalCookieName","USER_COOKIE");
+        						             filterRegistrationBean.addInitParameter("principalSessionName","USER_SESSION");
+        filterRegistrationBean.addUrlPatterns("/*");
+        return filterRegistrationBean;
+    }
+```
+
+> 配置 `StatViewServlet` 和 `WebStatFilter`
+
+
+
+------
+
+
+
+#### 四：整合 `Mybatis`
+
+
+
+###### 1）注解版配置
+
+其实注解版什么都不需要配置，只需要在接口上添加 `@Mapper` 注解，然后写接口，在接口上加注解，并写对应的 `SQL` 语句就可以了
+
+```java
+import com.feng.boot.mybatis.bean.Department;
+import org.apache.ibatis.annotations.*;
+
+/**
+ * @author Lee
+ */
+@Mapper
+public interface DepartmentMapper {
+
+    /**
+     * 根据 ID 查询 Department
+     * @param id
+     * @return
+     */
+    @Select("select * from department d where d.id = #{id}")
+    Department getDeptById(Integer id);
+
+    /**
+     * 根据 ID 删除 Department
+     * @param dId
+     * @return
+     */
+    @Delete("delete from department d where d.id = #{id}")
+    int deleteDepartment(Integer dId);;
+
+    /**
+     * 插入 Department
+     * @param department
+     * @return
+     */
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    @Insert("insert into department(departmentName) value (#{departmentName})")
+    int insertDepartment(Department department);
+
+    /**
+     * 更新 departmentName
+     * @param department
+     * @return
+     */
+    @Update("update department d set d.departmentName = ${departmentName} where d.id
+            = ${id}")
+    int updateSelective(Department department);
+
+}
+
+```
+
+```java
+@Options(useGeneratedKeys = true,keyProperty = "id")
+```
+
+> 是为了返回插入数据库中的记录的主键
