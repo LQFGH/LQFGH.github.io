@@ -4,12 +4,13 @@ title:      "spring-boot-jdbc"
 subtitle:   "spring boot连接数据库"
 date:       2019-08-17 17:10
 author:     "LQFGH"
-header-img: "img/post-bg-halting.jpg"
+header-img: "img/spring-cloud-bg.png"
 header-mask: 0.3
 catalog:    true
 tags:
 
   - springboot
+
 ---
 
 
