@@ -1,5 +1,5 @@
 ---
-layout:     post
+	layout:     post
 title:      "spring-boot-jdbc"
 subtitle:   "spring boot连接数据库"
 date:       2019-08-17 17:10
@@ -14,7 +14,7 @@ tags:
 
 
 
-
+[TOC]
 
 
 
@@ -38,7 +38,7 @@ tags:
 
 
 
-###### 二：配置
+#### 二：配置
 
 ```yml
 server:
@@ -209,9 +209,9 @@ class DataSourceInitializer implements ApplicationListener<DataSourceInitialized
 
 
 
-#### 三：`druid` 配置
+# Ⅰ：`druid` 配置
 
-###### 1）添加依赖
+#### 一：添加依赖
 
 ```xml
         <dependency>
@@ -222,7 +222,7 @@ class DataSourceInitializer implements ApplicationListener<DataSourceInitialized
 
 
 
-###### 2）属性配置
+#### 二：属性配置
 
 ```yml
 spring:
@@ -254,7 +254,7 @@ spring:
 
 
 
-###### 3）让配置的属性生效
+#### 三：让配置的属性生效
 
 ```java
     @ConfigurationProperties(prefix = "spring.druid")
@@ -268,7 +268,7 @@ spring:
 
 
 
-4）配置 `druid` 监控
+#### 四：配置 `druid` 监控
 
 ```java
     @Bean
@@ -305,11 +305,9 @@ spring:
 
 
 
-#### 四：整合 `Mybatis`
+# Ⅲ：整合 `Mybatis`
 
 
-
-###### 1）注解版配置
 
 其实注解版什么都不需要配置，只需要在接口上添加 `@Mapper` 注解，然后写接口，在接口上加注解，并写对应的 `SQL` 语句就可以了
 
@@ -366,3 +364,116 @@ public interface DepartmentMapper {
 ```
 
 > 是为了返回插入数据库中的记录的主键
+
+
+
+若在 `Mapper` 接口上不使用 `@Mapper` 标注，则需要在 `mybatis` 配置类上添加 `@MapperScan` 注解并指定 `Mapper` 接口所在包
+
+```java
+@MapperScan(basePackages = {"com.feng.boot.mybatis.mapper"})
+@Configuration
+public class MybatisConfig {
+```
+
+
+
+使用配置文件 配置 `mybatis` 常用配置
+
+```properties
+mybatis.mapper-locations=com.feng.boot.mapper
+mybatis.config-location=classpath:mybatis-config.xml
+```
+
+使用自定义配置 配置 `mybatis` 常用配置
+
+```java
+@MapperScan(basePackages = {"com.feng.boot.mybatis.mapper"})
+@Configuration
+public class MybatisConfig {
+
+    @Bean
+    public ConfigurationCustomizer configurationCustomizer(){
+        return (customizer) -> {
+            customizer.setMapUnderscoreToCamelCase(true);
+        };
+    }
+}
+```
+
+
+
+`mybatis` 全局配置文件和 `mapper` 配置文件使用
+
+![1566571270759](/img/in-post/1566571270759.png)
+
+```properties
+mybatis.mapper-locations=classpath:mybatis/mapper/*.xml
+mybatis.config-location=classpath:mybatis/mybatis-config.xml
+```
+
+
+
+# Ⅳ：整合 `JPA`
+
+当然整合 `JPA` 是在已经配置好了数据源的前提下，我们这里就不展示数据源的配置了
+
+![1566640074632](/img/in-post/1566640074632.png)
+
+#### 一：添加依赖
+
+**pom.xml**
+
+```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+```
+
+#### 二：配置 `jpa` 和 `hibernate` 
+
+```yml
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL57InnoDBDial
+```
+
+#### 三：`配置` `jpa` 扫描实体类包
+
+```java
+@EntityScan(basePackages = {"com.feng.boot.datajpa.entity"})
+@Configuration
+public class DataJpaConfig {
+}
+```
+
+#### 四：编写实体类
+
+```java
+@Entity
+@Table(name = "tbl_user")
+@Data
+@Accessors(chain = true)
+public class User implements Serializable {
+    private static final long serialVersionUID = 5467023455095967635L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String userName;
+    private Integer age;
+
+}
+```
+
+###### 5）编写 `Repository` 接口
+
+```java
+public interface UserRepository extends JpaRepository<User, Integer> {
+    User getUserById(Integer id);
+}
+```
+
+
+
