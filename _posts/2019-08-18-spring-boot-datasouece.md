@@ -1,5 +1,5 @@
 ---
-	layout:     post
+layout:     post
 title:      "spring-boot-jdbc"
 subtitle:   "spring boot连接数据库"
 date:       2019-08-17 17:10
@@ -467,7 +467,7 @@ public class User implements Serializable {
 }
 ```
 
-###### 5）编写 `Repository` 接口
+#### 五：编写 `Repository` 接口
 
 ```java
 public interface UserRepository extends JpaRepository<User, Integer> {
